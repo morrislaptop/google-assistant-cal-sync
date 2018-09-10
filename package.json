@@ -1,0 +1,19 @@
+{
+  "name": "google-assistant-cal-sync",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "@types/node": "^10.9.4",
+    "date-fns": "^1.29.0",
+    "dotenv": "^6.0.0",
+    "googleapis": "^33.0.0"
+  }
+}
