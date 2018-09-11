@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+console.log(process.env)
+
 import { google } from 'googleapis'
 import { startOfToday, endOfToday } from 'date-fns'
 
