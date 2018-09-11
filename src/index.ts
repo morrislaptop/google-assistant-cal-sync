@@ -16,21 +16,41 @@ async function run()
 
   let calendar = google.calendar('v3')
 
-  // Get list of source events
-  let sourceEvents = await calendar.events.list({ 
-    auth, 
-    calendarId: 'craig.morris@digitalrisks.co.uk',
-    timeMin: startOfToday().toISOString(),
-    timeMax: endOfToday().toISOString(),
-  })
-
   // Delete events in destination calendar
-  let currentEvents = await calendar.events.list({ 
+  let currentEvents = (await calendar.events.list({ 
     auth, 
     calendarId: 'f6i5lp0mpos0r6icfmibfmgusc@group.calendar.google.com',
     timeMin: startOfToday().toISOString(),
     timeMax: endOfToday().toISOString(),
-  })
+  })).data.items
+
+  await Promise.all(currentEvents.map(event => {
+    return calendar.events.delete({
+      auth,
+      calendarId: 'f6i5lp0mpos0r6icfmibfmgusc@group.calendar.google.com',
+      eventId: event.id,
+    })
+  }))
+
+  // Get list of source events
+  let sourceEvents = (await calendar.events.list({ 
+    auth, 
+    calendarId: 'craig.morris@digitalrisks.co.uk',
+    timeMin: startOfToday().toISOString(),
+    timeMax: endOfToday().toISOString(),
+  })).data.items
+
+  await Promise.all(sourceEvents.map(event => {
+    return calendar.events.insert({
+      auth,
+      calendarId: 'f6i5lp0mpos0r6icfmibfmgusc@group.calendar.google.com',
+      requestBody: {
+        summary: event.summary,
+        start: event.start,
+        end: event.end,
+      }
+    })
+  }))
 }
 
 run()
