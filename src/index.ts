@@ -5,6 +5,8 @@ import { startOfToday, endOfToday } from 'date-fns'
 
 async function run()
 {
+  console.log('Starting')
+
   let auth = new google.auth.JWT(
     process.env.CLIENT_EMAIL,
     null,
@@ -25,6 +27,8 @@ async function run()
   })).data.items
 
   await Promise.all(currentEvents.map(event => {
+    console.log(`Deleting existing event: ${event.summary}`)
+
     return calendar.events.delete({
       auth,
       calendarId: 'f6i5lp0mpos0r6icfmibfmgusc@group.calendar.google.com',
@@ -41,6 +45,15 @@ async function run()
   })).data.items
 
   await Promise.all(sourceEvents.map(event => {
+    
+    // @todo Maybe include weekly / monthly
+    if (event.recurrence) {
+      console.log(`Skipping recurring event: ${event.summary}`)
+      return
+    }
+
+    console.log(`Creating event: ${event.summary}`)
+
     return calendar.events.insert({
       auth,
       calendarId: 'f6i5lp0mpos0r6icfmibfmgusc@group.calendar.google.com',
@@ -51,6 +64,8 @@ async function run()
       }
     })
   }))
+
+  console.log('Done')
 }
 
 run()
