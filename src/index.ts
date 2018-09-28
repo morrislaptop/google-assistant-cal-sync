@@ -41,7 +41,7 @@ async function run()
     auth, 
     calendarId: 'craig.morris@digitalrisks.co.uk',
     timeMin: startOfToday().toISOString(),
-    timeMax: endOfToday().toISOString(),
+    timeMax: endOfTomorrow().toISOString(),
   })).data.items
 
   await Promise.all(sourceEvents.map(event => {
