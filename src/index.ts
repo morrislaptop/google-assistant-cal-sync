@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 import { google } from 'googleapis'
-import { startOfToday, endOfToday } from 'date-fns'
+import { startOfToday, endOfTomorrow } from 'date-fns'
 
 async function run()
 {
@@ -23,7 +23,7 @@ async function run()
     auth, 
     calendarId: 'f6i5lp0mpos0r6icfmibfmgusc@group.calendar.google.com',
     timeMin: startOfToday().toISOString(),
-    timeMax: endOfToday().toISOString(),
+    timeMax: endOfTomorrow().toISOString(),
   })).data.items
 
   await Promise.all(currentEvents.map(event => {
